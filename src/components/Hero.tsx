@@ -12,12 +12,12 @@ const Hero = () => {
               <span className="block text-blue-600">MERN Specialist</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Hi, I'm John Doe. I craft robust and scalable web applications using
+              Hi, I'm Abhishek Gaire. I craft robust and scalable web applications using
               modern technologies. Specialized in MongoDB, Express.js, React, and Node.js.
             </p>
             <div className="flex space-x-4">
               <a
-                href="#projects"
+                href="/projects"
                 className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
               >
                 View Projects
@@ -36,13 +36,13 @@ const Hero = () => {
               <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
-                  alt="John Doe"
+                  alt="Abhishek Gaire"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-lg">
                 <p className="text-sm font-semibold">
-                  5+ Years Experience
+                  3+ Years Experience
                 </p>
               </div>
             </div>

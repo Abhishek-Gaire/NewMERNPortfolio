@@ -3,8 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   FileText, 
-  Users, 
-  Tags, 
   MessageSquare, 
   Settings 
 } from 'lucide-react';
@@ -12,8 +10,6 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Posts', href: '/admin/posts', icon: FileText },
-  { name: 'Users', href: '/admin/users', icon: Users },
-  { name: 'Tags', href: '/admin/tags', icon: Tags },
   { name: 'Comments', href: '/admin/comments', icon: MessageSquare },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];

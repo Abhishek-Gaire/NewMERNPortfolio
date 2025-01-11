@@ -9,10 +9,10 @@ import {
 
 const Skills = () => {
   const skills = {
-    frontend: ['React', 'TypeScript', 'Tailwind CSS', 'Redux', 'Next.js'],
-    backend: ['Node.js', 'Express.js', 'NestJS', 'Socket.IO', 'REST APIs'],
-    database: ['MongoDB', 'PostgreSQL', 'Redis', 'Mongoose', 'TypeORM'],
-    tools: ['Git', 'Docker', 'AWS', 'Jest', 'CI/CD'],
+    frontend: ['ReactJS', 'TypeScript', 'Javascript', 'EJS', 'Tailwind CSS','Context API'],
+    backend: ['Node.js', 'Express.js', 'NestJS', 'WebSocket', 'REST APIs','GraphQL APIs'],
+    database: ['MongoDB', 'PostgreSQL', 'Sequelize', 'Mongoose', 'MySQL','Supabase'],
+    tools: ['Git', 'Docker', 'NGinx', 'Postman', 'CI/CD','Swagger'],
   };
 
   return (

@@ -18,7 +18,7 @@ const Header = () => {
     <header className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-gray-800">JD</Link>
+          <Link to="/" className="text-2xl font-bold text-gray-800">AG</Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -37,13 +37,13 @@ const Header = () => {
 
           {/* Social Links */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="https://github.com" className="text-gray-600 hover:text-gray-900">
+            <a href="https://github.com/Abhishek-Gaire" className="text-gray-600 hover:text-gray-900">
               <Github size={20} />
             </a>
-            <a href="https://linkedin.com" className="text-gray-600 hover:text-gray-900">
+            <a href="https://www.linkedin.com/in/abhisek-gaire-359294219/" className="text-gray-600 hover:text-gray-900">
               <Linkedin size={20} />
             </a>
-            <a href="https://twitter.com" className="text-gray-600 hover:text-gray-900">
+            <a href="https://x.com/GaireAbhishek44" className="text-gray-600 hover:text-gray-900">
               <Twitter size={20} />
             </a>
           </div>
@@ -75,13 +75,13 @@ const Header = () => {
               ))}
             </div>
             <div className="flex space-x-4 mt-4">
-              <a href="https://github.com" className="text-gray-600 hover:text-gray-900">
+              <a href="https://github.com/Abhishek-Gaire" className="text-gray-600 hover:text-gray-900">
                 <Github size={20} />
               </a>
-              <a href="https://linkedin.com" className="text-gray-600 hover:text-gray-900">
+              <a href="https://www.linkedin.com/in/abhisek-gaire-359294219/" className="text-gray-600 hover:text-gray-900">
                 <Linkedin size={20} />
               </a>
-              <a href="https://twitter.com" className="text-gray-600 hover:text-gray-900">
+              <a href="https://x.com/GaireAbhishek44" className="text-gray-600 hover:text-gray-900">
                 <Twitter size={20} />
               </a>
             </div>

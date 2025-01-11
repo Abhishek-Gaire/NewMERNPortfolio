@@ -34,8 +34,8 @@ const Contact = () => {
                 <Mail className="text-blue-600 mr-4" size={24} />
                 <div>
                   <p className="font-medium">Email</p>
-                  <a href="mailto:john@example.com" className="text-gray-600">
-                    john@example.com
+                  <a href="mailto:abhisekgaire7@gmail.com" className="text-gray-600">
+                    abhisekgaire7@gmail.com
                   </a>
                 </div>
               </div>
@@ -44,7 +44,7 @@ const Contact = () => {
                 <div>
                   <p className="font-medium">Phone</p>
                   <a href="tel:+1234567890" className="text-gray-600">
-                    +1 (234) 567-890
+                    +977 9840000000
                   </a>
                 </div>
               </div>
@@ -52,7 +52,7 @@ const Contact = () => {
                 <MapPin className="text-blue-600 mr-4" size={24} />
                 <div>
                   <p className="font-medium">Location</p>
-                  <p className="text-gray-600">San Francisco, CA</p>
+                  <p className="text-gray-600">Pokhara,Nepal</p>
                 </div>
               </div>
             </div>
