@@ -3,26 +3,9 @@ export interface Profile {
   email: string;
   full_name: string | null;
   avatar_url: string | null;
-  role: 'admin' | 'user';
+  role: 'admin';
   created_at: string;
   updated_at: string;
-}
-
-export interface Post {
-  id: string;
-  title: string;
-  content: string;
-  author_id: string;
-  published: boolean;
-  created_at: string;
-  updated_at: string;
-  author?: Profile;
-  tags?: Tag[];
-}
-
-export interface Tag {
-  id: string;
-  name: string;
 }
 
 export interface Project {

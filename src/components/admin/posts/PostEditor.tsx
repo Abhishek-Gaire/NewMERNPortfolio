@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import TagSelector from './TagSelector';
 import ImageUpload from '../shared/ImageUpload';
-import { Post } from '../../../types';
+import { BlogPost } from '../../../types';
 
 const postSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -20,7 +20,7 @@ const postSchema = z.object({
 type PostForm = z.infer<typeof postSchema>;
 
 interface PostEditorProps {
-  post?: Post;
+  post?: BlogPost;
   onSave: (data: PostForm) => Promise<void>;
 }
 
@@ -35,8 +35,8 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
     defaultValues: {
       title: post?.title || '',
       content: post?.content || '',
-      published: post?.published || false,
-      tags: post?.tags?.map(tag => tag.id) || [],
+      date: post?.date || false,
+      tags: post?.tags || [],
     },
   });
 
@@ -80,30 +80,6 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
         {errors.content && (
           <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
         )}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            SEO Title
-          </label>
-          <input
-            type="text"
-            {...register('seoTitle')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            SEO Description
-          </label>
-          <textarea
-            {...register('seoDescription')}
-            rows={3}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
       </div>
 
       <div>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { AdminProject } from '../types/project';
+// import { AdminProject } from '../types/project';
 
+let AdminProject;
 interface ProjectStore {
   isEditing: boolean;
   selectedProject: AdminProject | null;

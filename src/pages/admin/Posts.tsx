@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Post } from '../../types';
+import { BlogPost } from '../../types';
 import { supabase } from '../../lib/supabase';
 import PostEditor from '../../components/admin/posts/PostEditor';
 import PostList from '../../components/admin/posts/PostList';
 import { Plus } from 'lucide-react';
 
 export default function Posts() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Post | undefined>();
+  const [selectedPost, setSelectedPost] = useState<BlogPost | undefined>();
 
   useEffect(() => {
     fetchPosts();
@@ -63,7 +63,7 @@ export default function Posts() {
         <div>
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">
-              {selectedPost ? 'Edit Post' : 'New Post'}
+              {selectedPost ? 'Edit Blog Post' : 'New Blog Post'}
             </h1>
             <button
               onClick={() => {
@@ -89,7 +89,7 @@ export default function Posts() {
               className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
             >
               <Plus className="h-5 w-5 mr-2" />
-              New Post
+              New Blog Post
             </button>
           </div>
           <PostList
