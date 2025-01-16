@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Tag } from '../../../types';
+import { supabase } from '../../../lib/supabase';
 import { X } from 'lucide-react';
-
-interface Tag {
-  id: string;
-  name: string;
-}
 
 interface TagSelectorProps {
   selectedTags: string[];
@@ -12,16 +9,25 @@ interface TagSelectorProps {
 }
 
 export default function TagSelector({ selectedTags, onChange }: TagSelectorProps) {
-  // Predefined list of tags
-  const predefinedTags: Tag[] = [
-    { id: '1', name: 'React' },
-    { id: '2', name: 'JavaScript' },
-    { id: '3', name: 'TypeScript' },
-    { id: '4', name: 'Node.js' },
-    { id: '5', name: 'CSS' },
-  ];
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [tags] = useState<Tag[]>(predefinedTags);
+  useEffect(() => {
+    async function fetchTags() {
+      const { data, error } = await supabase
+        .from('tags')
+        .select('*')
+        .order('name');
+      if (error) {
+        console.error('Error fetching tags:', error);
+      } else {
+        setTags(data || []);
+      }
+      setLoading(false);
+    }
+
+    fetchTags();
+  }, []);
 
   const handleTagClick = (tagId: string) => {
     if (selectedTags.includes(tagId)) {
@@ -30,6 +36,10 @@ export default function TagSelector({ selectedTags, onChange }: TagSelectorProps
       onChange([...selectedTags, tagId]);
     }
   };
+
+  if (loading) {
+    return <div>Loading tags...</div>;
+  }
 
   return (
     <div className="flex flex-wrap gap-2">

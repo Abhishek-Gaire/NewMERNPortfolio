@@ -25,10 +25,16 @@ export interface BlogPost {
   date: string;
   tags: string[];
   imageUrl?: string;
+  publish:boolean;
 }
 
 export interface Skill {
   name: string;
   icon: string;
   category: 'frontend' | 'backend' | 'database' | 'tools';
+}
+
+export interface Tag{
+  id:string;
+  name:string;
 }

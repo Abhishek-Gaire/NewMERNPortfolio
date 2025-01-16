@@ -1,3 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* 
+.toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+button {
+    padding: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #e0e0e0;
+  } */
+  
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
