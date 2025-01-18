@@ -10,7 +10,7 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Posts', href: '/admin/posts', icon: FileText },
-  { name: 'Comments', href: '/admin/comments', icon: MessageSquare },
+  { name: 'Projects', href: '/admin/projects', icon: MessageSquare },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

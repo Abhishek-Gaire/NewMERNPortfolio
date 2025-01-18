@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Post } from '../../../types';
+import { BlogPost } from '../../../types';
 import { Edit2, Trash2, Search, Filter } from 'lucide-react';
 
 interface PostListProps {
-  posts: Post[];
-  onEdit: (post: Post) => void;
+  posts: BlogPost[];
+  onEdit: (post: BlogPost) => void;
   onDelete: (id: string) => Promise<void>;
 }
 
@@ -13,10 +13,11 @@ export default function PostList({ posts, onEdit, onDelete }: PostListProps) {
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
 
   const filteredPosts = posts.filter(post => {
+    console.log(post.id);
     const matchesSearch = post.title.toLowerCase().includes(search.toLowerCase());
     const matchesFilter = filter === 'all' || 
-      (filter === 'published' && post.published) ||
-      (filter === 'draft' && !post.published);
+      (filter === 'published' && post.publish) ||
+      (filter === 'draft' && !post.publish);
     return matchesSearch && matchesFilter;
   });
 
@@ -58,11 +59,11 @@ export default function PostList({ posts, onEdit, onDelete }: PostListProps) {
                   </h3>
                   <div className="mt-2 flex items-center text-sm text-gray-500">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      post.published
+                      post.publish
                         ? 'bg-green-100 text-green-800'
                         : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                      {post.published ? 'Published' : 'Draft'}
+                      {post.publish ? 'Published' : 'Draft'}
                     </span>
                     <span className="ml-2">
                       {new Date(post.created_at).toLocaleDateString()}

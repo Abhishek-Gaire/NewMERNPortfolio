@@ -5,20 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  completionDate: string;
-  image: string;
-  technologies: string[];
-  role: string;
-  challenges: string;
-  solutions: string;
-  liveUrl?: string;
-  githubUrl?: string;
-  category: string;
-}
+import { Project } from '../types/index';
 
 const projects: Project[] = [
   {
@@ -88,9 +75,9 @@ export default function ProjectsPage() {
   return (
     <>
       <Helmet>
-        <title>Projects Portfolio | John Doe</title>
+        <title>Projects Portfolio</title>
         <meta name="description" content="Explore my portfolio of web development and software engineering projects." />
-        <meta property="og:title" content="Projects Portfolio | John Doe" />
+        <meta property="og:title" content="Projects Portfolio" />
         <meta property="og:description" content="Explore my portfolio of web development and software engineering projects." />
       </Helmet>
 
@@ -157,6 +144,7 @@ export default function ProjectsPage() {
             {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
+                onClick={() => setSelectedProject(project)}
                 layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

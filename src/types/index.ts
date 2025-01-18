@@ -12,19 +12,23 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  completionDate: string;
+  image: string;
   technologies: string[];
-  imageUrl: string;
+  role: string;
+  challenges: string;
+  solutions: string;
   liveUrl?: string;
-  githubUrl: string;
+  githubUrl?: string;
+  category: string;
 }
-
 export interface BlogPost {
   id: string;
   title: string;
   content: string;
-  date: string;
+  created_at: string;
   tags: string[];
-  imageUrl?: string;
+  imageUrl: string;
   publish:boolean;
 }
 

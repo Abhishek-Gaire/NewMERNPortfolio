@@ -1,10 +1,10 @@
 import React from 'react';
 import { Clock, Calendar, Users, AlertTriangle } from 'lucide-react';
-import { AdminProject } from '../../../types/project';
+import { Project } from '../../../types/index';
 import { formatDate } from '../../../utils/dateUtils';
 
 interface ProjectHeaderProps {
-  project: AdminProject;
+  project: Project;
 }
 
 export default function ProjectHeader({ project }: ProjectHeaderProps) {

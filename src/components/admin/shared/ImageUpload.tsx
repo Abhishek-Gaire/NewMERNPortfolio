@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 
 interface ImageUploadProps {
@@ -20,7 +20,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
       const { error: uploadError } = await supabase.storage
         .from('images')
         .upload(filePath, file);
-
+        
       if (uploadError) {
         throw uploadError;
       }
@@ -30,6 +30,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
         .getPublicUrl(filePath);
 
       onChange(data.publicUrl);
+      console.log(data.publicUrl);
     } catch (error) {
       console.error('Error uploading image:', error);
     }

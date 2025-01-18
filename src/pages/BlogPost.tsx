@@ -13,7 +13,7 @@ import ErrorBoundary from '../components/shared/ErrorBoundary';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { estimateReadingTime } from '../utils/textUtils';
 import { formatDate } from '../utils/dateUtils';
-import type { Post } from '../types';
+import type { BlogPost } from '../types/index';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();

@@ -1,22 +1,18 @@
-import React, { useMemo } from 'react';
-import { createEditor  } from 'slate';
-import { Editor, Transforms, Element as SlateElement } from 'slate';
-import { Slate, Editable, withReact, useSlate } from 'slate-react';
-
+import React from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import TagSelector from './TagSelector';
 import ImageUpload from '../shared/ImageUpload';
-import { BlogPost } from '../../../types/index';
-import { initialEditorValue } from '../../../types/slate';
+import { BlogPost } from '../../../types';
 
+const TINY_MCE_API_KEY = import.meta.env.TINYMCE_API_KEY;
 const postSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   content: z.string().min(1, 'Content is required'),
+  imageUrl:z.string().min(1, 'Image is required'),
   tags: z.array(z.string()),
-  featuredImage: z.string().optional(),
-  date: z.string(),
   publish: z.boolean(),
 });
 
@@ -27,72 +23,7 @@ interface PostEditorProps {
   onSave: (data: PostForm) => Promise<void>;
 }
 
-// Custom editor toolbar button for bold, italic, heading, alignment, etc.
-const CustomEditor = () => {
-  const editor = useSlate();
-
-  // Toggle mark (bold, italic)
-  const toggleMark = (mark: "bold" | "italic" | "underline") => {
-    const isActive = isMarkActive(mark);
-    if (isActive) {
-      Editor.removeMark(editor, mark);
-    } else {
-      Editor.addMark(editor, mark, true);
-    }
-  };
-
-  const isMarkActive = (mark: 'bold' | 'italic' | 'underline') => {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => Text.isText(n) && n[mark as keyof typeof n] === true,
-    });
-    return !!match;
-  };
-  
-
-  const toggleBlock = (blockType: string) => {
-    const isActive = isBlockActive(blockType);
-    const isList = blockType === 'list-item';
-  
-    // Unwrap the current list items if the block type is not a list.
-    Transforms.unwrapNodes(editor, {
-      match: (n) => Editor.isBlock(editor, n) && SlateElement.isElement(n) && n.type === 'list-item',
-    });
-  
-    // Set the new block type, defaulting to 'paragraph' when inactive.
-  Transforms.setNodes(editor, {
-    type: isActive ? 'paragraph' : (blockType as 'paragraph' | 'heading' | 'list-item'),
-  });
-  };
-  
-  // Helper function to check if the block is active.
-  const isBlockActive = (blockType: string) => {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => Editor.isBlock(editor, n) && SlateElement.isElement(n) && n.type === blockType,
-    });
-    return !!match;
-  };
-
-  // Handle alignment change
-  const toggleAlignment = (alignment: 'left' | 'center' | 'right') => {
-    Transforms.setNodes(editor, { align: alignment });
-  };
-
-  return (
-    <div className="toolbar">
-      <button onClick={() => toggleMark('bold')}>Bold</button>
-      <button onClick={() => toggleMark('italic')}>Italic</button>
-      <button onClick={() => toggleBlock('heading')}>Heading</button>
-      <button onClick={() => toggleBlock('paragraph')}>Paragraph</button>
-      <button onClick={() => toggleAlignment('left')}>Align Left</button>
-      <button onClick={() => toggleAlignment('center')}>Align Center</button>
-      <button onClick={() => toggleAlignment('right')}>Align Right</button>
-    </div>
-  );
-};
-
 export default function PostEditor({ post, onSave }: PostEditorProps) {
-  const editor = useMemo(() => withReact(createEditor()), []);
-
   const {
     register,
     control,
@@ -102,10 +33,10 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: post?.title || '',
-      content: post?.content || JSON.stringify(initialEditorValue),
-      date: post?.date,
-      tags: post?.tags || [],
+      content: post?.content || '',
       publish: post?.publish || false,
+      tags: post?.tags || [],
+      imageUrl:post?.imageUrl || '',
     },
   });
 
@@ -127,25 +58,31 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
         <label className="block text-sm font-medium text-gray-700">Content</label>
         <Controller
           name="content"
+          defaultValue='Write Your Blog Post Here'
           control={control}
           render={({ field }) => (
-          <Slate editor={editor} initialValue={initialEditorValue} onChange={() => {}}>
-            <CustomEditor />
-            <Editable
-              renderElement={(props) => <div {...props.attributes}>{props.children}</div>}
-              renderLeaf={(props) => {
-                if (props.leaf.bold) {
-                  return <strong>{props.children}</strong>;
-                }
-                if (props.leaf.italic) {
-                  return <em>{props.children}</em>;
-                }
-                return <span>{props.children}</span>;
+            <Editor
+              apiKey="vl5z9i3ml7qjcisdsej8aycmaslv0x7s8c7dl5w5gf9fxryp"
+              onEditorChange={(content) => field.onChange(content)}
+              init={{
+                plugins: [
+                  // Core editing features
+                  'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 
+                  'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                  // Optional features: Remove these if not used
+                  'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 
+                  'a11ychecker', 'tinymcespellchecker', 'mentions', 'tinycomments', 
+                  'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'markdown',
+                ],
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                tinycomments_mode: 'embedded',
+                branding: false, // Removes "Powered by TinyMCE" branding
+                tinycomments_author: 'Author name',
               }}
+              // initialValue={field.value}
             />
-          </Slate>
           )}
-        />
+        /> 
         {errors.content && (
           <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
         )}
@@ -170,7 +107,7 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
           Featured Image
         </label>
         <Controller
-          name="featuredImage"
+          name="imageUrl"
           control={control}
           render={({ field }) => (
             <ImageUpload

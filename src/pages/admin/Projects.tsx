@@ -4,22 +4,22 @@ import { Plus } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import ProjectList from '../../components/admin/projects/ProjectList';
 import ProjectForm from '../../components/admin/projects/ProjectForm';
-import { AdminProject } from '../../types/project';
+import { Project } from '../../types/index';
 import useProjectStore from '../../stores/projectStore';
 
 export default function AdminProjects() {
   const { isEditing, setEditing } = useProjectStore();
 
   const { data: projects, isLoading } = useQuery({
-    queryKey: ['admin-projects'],
+    queryKey: ['Projects'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('admin_projects')
+        .from('Projects')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as AdminProject[];
+      return data as Project[];
     },
   });
 

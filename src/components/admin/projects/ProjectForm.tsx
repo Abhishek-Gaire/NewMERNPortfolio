@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../lib/supabase';
-import { AdminProject, PriorityLevel } from '../../../types/project';
+import { Project } from '../../../types/index';
 import  useProjectStore  from '../../../stores/projectStore';
 import ImageUpload from '../shared/ImageUpload';
 import { generateProjectId } from '../../../utils/projectUtils';
@@ -166,7 +166,7 @@ export default function ProjectForm() {
           />
         </div>
 
-        <div className="md:col-span-2">
+        {/* <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700">
             Documents
           </label>
@@ -182,7 +182,7 @@ export default function ProjectForm() {
               />
             )}
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-end space-x-4">

@@ -17,12 +17,8 @@ export default function Posts() {
 
   async function fetchPosts() {
     const { data, error } = await supabase
-      .from('posts')
-      .select(`
-        *,
-        author:profiles(*),
-        tags(*)
-      `)
+      .from('Blogs')
+      .select(`*`)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -34,16 +30,18 @@ export default function Posts() {
   }
 
   const handleSave = async (data: any) => {
+    
     try {
       if (selectedPost) {
         await supabase
-          .from('posts')
+          .from('Blogs')
           .update(data)
           .eq('id', selectedPost.id);
       } else {
+        console.log(data);
         await supabase
-          .from('posts')
-          .insert([data]);
+          .from('Blogs')
+          .insert(data);
       }
       await fetchPosts();
       setIsEditing(false);
@@ -99,7 +97,7 @@ export default function Posts() {
               setIsEditing(true);
             }}
             onDelete={async (id) => {
-              await supabase.from('posts').delete().eq('id', id);
+              await supabase.from('Blogs').delete().eq('id', id);
               await fetchPosts();
             }}
           />

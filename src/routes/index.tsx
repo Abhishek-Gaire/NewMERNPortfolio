@@ -6,7 +6,7 @@ import Login from '../pages/auth/Login';
 import Posts from '../pages/admin/Posts';
 import ProjectsPage from '../pages/Projects';
 import AdminProjects from '../pages/admin/Projects';
-import ProjectDetails from '../components/admin/projects/ProjectDetails';
+import BlogListing from '../pages/BlogListing';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ export const router = createBrowserRouter([
   {
     path: '/projects',
     element: <ProjectsPage />,
+  },
+  {
+    path: '/blogs',
+    element: <BlogListing />,
   },
   {
     path: '/blog/:slug',
@@ -31,7 +35,6 @@ export const router = createBrowserRouter([
     children: [
       { path: 'posts', element: <Posts /> },
       { path: 'projects', element: <AdminProjects /> },
-      { path: 'project/:projectId', element: <ProjectDetails /> },
     ],
   },
 ]);
