@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 // import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import BlogContent from '../components/blog/BlogContent';
 import ShareButtons from '../components/blog/ShareButtons';
 import CommentSection from '../components/blog/CommentSection';
@@ -14,6 +16,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { estimateReadingTime } from '../utils/textUtils';
 import { formatDate } from '../utils/dateUtils';
 import type { BlogPost } from '../types/index';
+import BlogTagContent from '../components/blog/BlogTagContent';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -23,17 +26,13 @@ export default function BlogPost() {
     queryKey: ['post', slug],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('posts')
-        .select(`
-          *,
-          author:profiles(id, full_name, avatar_url),
-          tags(id, name)
-        `)
-        .eq('slug', slug)
+        .from('Blogs')
+        .select(`*`)
+        .eq('id', slug)
         .single();
 
       if (error) throw error;
-      return data as Post;
+      return data as BlogPost;
     },
   });
 
@@ -44,21 +43,21 @@ export default function BlogPost() {
   const readingTime = estimateReadingTime(post.content);
 
   return (
-    <ErrorBoundary>
+    <>
+      <Header/>
+      <ErrorBoundary>
       <article className="max-w-4xl mx-auto px-4 py-12">
         <Helmet>
           <title>{post.title}</title>
-          <meta name="description" content={post.seoDescription || post.title} />
           <meta property="og:title" content={post.title} />
-          <meta property="og:description" content={post.seoDescription || post.title} />
-          {post.featuredImage && <meta property="og:image" content={post.featuredImage} />}
+          {post.imageUrl && <meta property="og:image" content={post.imageUrl} />}
         </Helmet>
 
         {/* Header */}
         <header className="mb-8">
-          {post.featuredImage && (
+          {post.imageUrl && (
             <img
-              src={post.featuredImage}
+              src={post.imageUrl}
               alt={post.title}
               className="w-full h-[400px] object-cover rounded-lg mb-6"
             />
@@ -66,7 +65,7 @@ export default function BlogPost() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
           <div className="flex items-center space-x-4 text-gray-600 mb-4">
             <div className="flex items-center">
-              {post.author?.avatar_url ? (
+              {/* {post.author?.avatar_url ? (
                 <img
                   src={post.author.avatar_url}
                   alt={post.author.full_name}
@@ -74,8 +73,8 @@ export default function BlogPost() {
                 />
               ) : (
                 <div className="w-10 h-10 rounded-full bg-gray-200 mr-2" />
-              )}
-              <span>{post.author?.full_name}</span>
+              )} */}
+              <span>Abhishek Gaire</span>
             </div>
             <span>•</span>
             <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
@@ -83,14 +82,7 @@ export default function BlogPost() {
             <span>{readingTime} min read</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {post.tags?.map(tag => (
-              <span
-                key={tag.id}
-                className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-              >
-                {tag.name}
-              </span>
-            ))}
+            <BlogTagContent post={post}/>
           </div>
         </header>
 
@@ -101,7 +93,7 @@ export default function BlogPost() {
         <ShareButtons
           url={window.location.href}
           title={post.title}
-          description={post.seoDescription || ''}
+          description={''}
         />
 
         {/* Navigation */}
@@ -117,5 +109,8 @@ export default function BlogPost() {
         />
       </article>
     </ErrorBoundary>
+      <Footer/>
+    </>
+    
   );
 }

@@ -38,7 +38,6 @@ export default function Posts() {
           .update(data)
           .eq('id', selectedPost.id);
       } else {
-        console.log(data);
         await supabase
           .from('Blogs')
           .insert(data);

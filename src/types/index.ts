@@ -27,7 +27,7 @@ export interface BlogPost {
   title: string;
   content: string;
   created_at: string;
-  tags: string[];
+  tags: Tag[];
   imageUrl: string;
   publish:boolean;
 }

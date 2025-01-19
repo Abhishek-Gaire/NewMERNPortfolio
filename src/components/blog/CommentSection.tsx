@@ -13,11 +13,6 @@ interface Comment {
   id: string;
   content: string;
   created_at: string;
-  author: {
-    id: string;
-    full_name: string;
-    avatar_url: string;
-  };
   likes_count: number;
   user_has_liked: boolean;
 }
@@ -34,7 +29,6 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         .from('comments')
         .select(`
           *,
-          author:profiles(id, full_name, avatar_url),
           likes_count:comment_likes(count),
           user_has_liked:comment_likes!inner(user_id)
         `)

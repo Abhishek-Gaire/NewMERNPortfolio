@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabase';
-import type { Post } from '../../types';
+import type { BlogPost } from '../../types';
 
 interface RelatedPostsProps {
   currentPostId: string;
@@ -14,25 +14,24 @@ export default function RelatedPosts({ currentPostId, tags }: RelatedPostsProps)
     queryKey: ['related-posts', currentPostId, tags],
     queryFn: async () => {
       const { data } = await supabase
-        .from('posts')
+        .from('Blogs')
         .select(`
           id,
           title,
-          slug,
-          featuredImage,
+          imageUrl,
           created_at,
-          tags!inner(id)
+          tags
         `)
         .neq('id', currentPostId)
-        .eq('published', true)
-        .in('tags.id', tags)
+        .eq('publish', true)
         .limit(3);
-
-      return data as Post[];
+        console.log(data);
+      return data as BlogPost[];
     },
+    
     enabled: tags.length > 0,
   });
-
+  
   if (!relatedPosts?.length) return null;
 
   return (
@@ -42,12 +41,12 @@ export default function RelatedPosts({ currentPostId, tags }: RelatedPostsProps)
         {relatedPosts.map(post => (
           <Link
             key={post.id}
-            to={`/blog/${post.slug}`}
+            to={`/blog/${post.id}`}
             className="group"
           >
-            {post.featuredImage && (
+            {post.imageUrl && (
               <img
-                src={post.featuredImage}
+                src={post.imageUrl}
                 alt={post.title}
                 className="w-full h-48 object-cover rounded-lg mb-4"
               />

@@ -7,12 +7,16 @@ import TagSelector from './TagSelector';
 import ImageUpload from '../shared/ImageUpload';
 import { BlogPost } from '../../../types';
 
-const TINY_MCE_API_KEY = import.meta.env.TINYMCE_API_KEY;
+const tagSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 const postSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   content: z.string().min(1, 'Content is required'),
-  imageUrl:z.string().min(1, 'Image is required'),
-  tags: z.array(z.string()),
+  imageUrl: z.string().min(1, 'Image is required'),
+  tags: z.array(tagSchema), // Updated to validate an array of objects
   publish: z.boolean(),
 });
 
@@ -47,7 +51,7 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
         <input
           type="text"
           {...register('title')}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 px-3 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
         {errors.title && (
           <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>

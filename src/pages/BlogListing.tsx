@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
-import { Search, Grid, List, X, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Grid, List, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,7 +10,8 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import ErrorBoundary from '../components/shared/ErrorBoundary';
 import { formatDate } from '../utils/dateUtils';
 import { estimateReadingTime } from '../utils/textUtils';
-
+import BlogContent from '../components/blog/BlogContent';
+import BlogTagContent from '../components/blog/BlogTagContent';
 const POSTS_PER_PAGE_OPTIONS = [10, 20, 50];
 
 export default function BlogListing() {
@@ -32,7 +33,7 @@ export default function BlogListing() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tags')
-        .select('id, name, post_count:posts(count)');
+        .select('id, name');
       if (error) throw error;
       return data;
     },
@@ -43,13 +44,8 @@ export default function BlogListing() {
     queryKey: ['blog-posts', page, postsPerPage, search, sortBy, selectedTags],
     queryFn: async () => {
       let query = supabase
-        .from('posts')
-        .select(`
-          *,
-          author:profiles(id, full_name, avatar_url),
-          tags(id, name),
-          comment_count:comments(count)
-        `, { count: 'exact' });
+        .from('Blogs')
+        .select(`*`, { count: 'exact' });
 
       // Apply search filter
       if (search) {
@@ -192,7 +188,7 @@ export default function BlogListing() {
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {tag.name} ({tag.post_count})
+                    {tag.name}
                   </button>
                 ))}
               </div>
@@ -215,10 +211,10 @@ export default function BlogListing() {
                     view === 'list' ? 'flex' : ''
                   }`}
                 >
-                  {post.featured_image && (
+                  {post.imageUrl && (
                     <div className={view === 'list' ? 'w-1/4' : ''}>
                       <img
-                        src={post.featured_image}
+                        src={post.imageUrl}
                         alt={post.title}
                         className="w-full h-48 object-cover"
                       />
@@ -226,7 +222,7 @@ export default function BlogListing() {
                   )}
                   <div className={`p-6 ${view === 'list' ? 'w-3/4' : ''}`}>
                     <h2 className="text-xl font-semibold mb-2">
-                      <a href={`/blog/${post.slug}`} className="hover:text-blue-600">
+                      <a href={`/blog/${post.id}`} className="hover:text-blue-600">
                         {post.title}
                       </a>
                     </h2>
@@ -235,19 +231,8 @@ export default function BlogListing() {
                       <span className="mx-2">•</span>
                       <span>{estimateReadingTime(post.content)} min read</span>
                     </div>
-                    <p className="text-gray-600 mb-4">
-                      {post.content.substring(0, 150)}...
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag:Object) => (
-                        <span
-                          key={tag.id}
-                          className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
+                    <BlogContent content={post.content.substring(0,150)}/>
+                    <BlogTagContent post={post}/>
                   </div>
                 </article>
               ))}

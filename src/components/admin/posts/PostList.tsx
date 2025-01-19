@@ -13,7 +13,6 @@ export default function PostList({ posts, onEdit, onDelete }: PostListProps) {
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
 
   const filteredPosts = posts.filter(post => {
-    console.log(post.id);
     const matchesSearch = post.title.toLowerCase().includes(search.toLowerCase());
     const matchesFilter = filter === 'all' || 
       (filter === 'published' && post.publish) ||
