@@ -14,23 +14,23 @@ export default function PostNavigation({ postId }: PostNavigationProps) {
     queryFn: async () => {
       const [prevPost, nextPost] = await Promise.all([
         supabase
-          .from('posts')
-          .select('id, title, slug')
+          .from('Blogs')
+          .select('id, title')
           .lt('created_at', postId)
-          .eq('published', true)
+          .eq('publish', true)
           .order('created_at', { ascending: false })
           .limit(1)
-          .single(),
+          .maybeSingle(),
         supabase
-          .from('posts')
-          .select('id, title, slug')
+          .from('Blogs')
+          .select('id, title')
           .gt('created_at', postId)
-          .eq('published', true)
+          .eq('publish', true)
           .order('created_at', { ascending: true })
           .limit(1)
-          .single(),
+          .maybeSingle(),
       ]);
-
+      
       return {
         prev: prevPost.data,
         next: nextPost.data,
@@ -41,10 +41,10 @@ export default function PostNavigation({ postId }: PostNavigationProps) {
   if (!navigation?.prev && !navigation?.next) return null;
 
   return (
-    <nav className="flex justify-between items-center my-8 border-t border-gray-200 pt-8">
+    <nav className="flex justify-between items-center my-8 border-gray-200 pt-8">
       {navigation?.prev ? (
         <Link
-          to={`/blog/${navigation.prev.slug}`}
+          to={`/blog/${navigation.prev.id}`}
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ChevronLeft className="w-5 h-5 mr-2" />
@@ -59,7 +59,7 @@ export default function PostNavigation({ postId }: PostNavigationProps) {
 
       {navigation?.next ? (
         <Link
-          to={`/blog/${navigation.next.slug}`}
+          to={`/blog/${navigation.next.id}`}
           className="flex items-center text-right text-gray-600 hover:text-gray-900"
         >
           <div>

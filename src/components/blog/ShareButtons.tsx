@@ -1,5 +1,6 @@
 import React from 'react';
 import { Twitter, Facebook, Linkedin, Link } from 'lucide-react';
+import {toast} from "react-toastify";
 
 interface ShareButtonsProps {
   url: string;
@@ -21,12 +22,12 @@ export default function ShareButtons({ url, title, description }: ShareButtonsPr
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(url);
-      // You might want to add a toast notification here
+      toast.success('Copied to clipboard!');
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('Failed to copy to clipboard.');
     }
   };
-
   return (
     <div className="flex items-center space-x-4 my-8 border-t border-b border-gray-200 py-6">
       <span className="text-gray-600">Share:</span>

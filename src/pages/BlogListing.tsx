@@ -33,8 +33,9 @@ export default function BlogListing() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tags')
-        .select('id, name');
+        .select('*');
       if (error) throw error;
+      
       return data;
     },
   });
@@ -108,7 +109,7 @@ export default function BlogListing() {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>Blog | Latest Posts</title>
+        <title>Blogs</title>
         <meta name="description" content="Read our latest blog posts about web development, technology, and more." />
       </Helmet>
 
@@ -172,13 +173,13 @@ export default function BlogListing() {
                   <button
                     key={tag.id}
                     onClick={() => {
-                      const newTags = selectedTags.includes(tag.id)
-                        ? selectedTags.filter(id => id !== tag.id)
-                        : [...selectedTags, tag.id];
+                      const newTags = selectedTags.includes(tag.name)
+                        ? selectedTags.filter(name => name !== tag.name)
+                        : [...selectedTags, tag.name];
                       
                       const params = new URLSearchParams(searchParams);
                       params.delete('tag');
-                      newTags.forEach(id => params.append('tag', id));
+                      newTags.forEach(name => params.append('tag', name));
                       params.set('page', '1');
                       setSearchParams(params);
                     }}

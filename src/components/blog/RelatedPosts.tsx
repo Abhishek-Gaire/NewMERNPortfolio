@@ -25,7 +25,6 @@ export default function RelatedPosts({ currentPostId, tags }: RelatedPostsProps)
         .neq('id', currentPostId)
         .eq('publish', true)
         .limit(3);
-        console.log(data);
       return data as BlogPost[];
     },
     
