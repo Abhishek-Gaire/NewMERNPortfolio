@@ -23,8 +23,6 @@ export default function AdminProjects() {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <div className="space-y-6">
       {isEditing ? (
@@ -42,6 +40,9 @@ export default function AdminProjects() {
             </button>
           </div>
           <ProjectList projects={projects || []} />
+          {isLoading && (
+            <p>Loading...</p>
+          )}
         </>
       )}
     </div>

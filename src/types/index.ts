@@ -13,13 +13,13 @@ export interface Project {
   title: string;
   description: string;
   completionDate: string;
-  image: string;
+  image_url: string;
   technologies: string[];
   role: string;
   challenges: string;
   solutions: string;
-  liveUrl?: string;
-  githubUrl?: string;
+  live_url?: string;
+  github_url?: string;
   category: string;
 }
 export interface BlogPost {

@@ -6,65 +6,36 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 import { Project } from '../types/index';
-
-const projects: Project[] = [
-  {
-    id: '1',
-    title: 'E-Commerce Platform',
-    description: 'A full-featured e-commerce platform built with React and Node.js, supporting multiple vendors, real-time inventory management, and secure payment processing.',
-    completionDate: '2024-02',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Redux', 'Stripe'],
-    role: 'Lead Full Stack Developer',
-    challenges: 'Implementing real-time inventory sync across multiple vendors while maintaining system performance.',
-    solutions: 'Utilized WebSocket connections and implemented an efficient caching strategy to handle real-time updates.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    category: 'Full Stack',
-  },
-  {
-    id: '2',
-    title: 'AI-Powered Analytics Dashboard',
-    description: 'An analytics dashboard that uses machine learning to provide predictive insights and data visualization for business metrics.',
-    completionDate: '2024-01',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
-    technologies: ['Python', 'React', 'TensorFlow', 'D3.js'],
-    role: 'Frontend Developer & ML Engineer',
-    challenges: 'Creating intuitive visualizations for complex ML predictions.',
-    solutions: 'Developed custom D3.js components and implemented progressive loading for large datasets.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    category: 'Machine Learning',
-  },
-  {
-    id: '3',
-    title: 'Real-time Collaboration Tool',
-    description: 'A collaborative workspace application supporting real-time document editing, video conferencing, and team chat.',
-    completionDate: '2023-12',
-    image: 'https://images.unsplash.com/photo-1600267175161-cfaa711b4a81',
-    technologies: ['WebRTC', 'Socket.io', 'React', 'Node.js'],
-    role: 'Full Stack Developer',
-    challenges: 'Maintaining consistency across multiple concurrent users.',
-    solutions: 'Implemented Operational Transformation algorithm for conflict resolution.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    category: 'Collaboration',
-  },
-];
+import { supabase } from '../lib/supabase';
+import { useQuery } from '@tanstack/react-query';
 
 const categories = ['All', 'Full Stack', 'Machine Learning', 'Collaboration'];
 
 export default function ProjectsPage() {
+  const {data:projects,isLoading,isError} = useQuery({
+    queryKey:['project'],
+    queryFn: async() => {
+      const {data,error} = await supabase
+      .from("Projects")
+      .select("*");
+
+      if(error){
+        throw new Error(error.message)
+      }
+     
+      return data;
+    }
+  })
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
-    return projects.filter(project => {
+    return projects?.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
+        project.technologies.some((tech:any) => tech.toLowerCase().includes(searchQuery.toLowerCase()));
       
       const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
       
@@ -72,6 +43,13 @@ export default function ProjectsPage() {
     });
   }, [searchQuery, selectedCategory]);
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Something went wrong. Please try again later.</p>;
+  }
   return (
     <>
       <Helmet>
@@ -141,7 +119,7 @@ export default function ProjectsPage() {
 
           {/* Projects Grid/List */}
           <div className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
-            {filteredProjects.map((project) => (
+            {filteredProjects?.map((project) => (
               <motion.div
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
@@ -155,7 +133,7 @@ export default function ProjectsPage() {
               >
                 <div className={`${viewMode === 'list' ? 'w-1/3' : ''}`}>
                   <img
-                    src={project.image}
+                    src={project.image_url}
                     alt={project.title}
                     className="w-full h-48 object-cover"
                   />
@@ -171,7 +149,7 @@ export default function ProjectsPage() {
                   </div>
                   <p className="text-gray-600 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech) => (
+                    {project.technologies.map((tech:any) => (
                       <span
                         key={tech}
                         className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
@@ -182,9 +160,9 @@ export default function ProjectsPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="space-x-4">
-                      {project.liveUrl && (
+                      {project.live_url && (
                         <a
-                          href={project.liveUrl}
+                          href={project.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center text-blue-600 hover:text-blue-700"
@@ -193,9 +171,9 @@ export default function ProjectsPage() {
                           Demo
                         </a>
                       )}
-                      {project.githubUrl && (
+                      {project.github_url && (
                         <a
-                          href={project.githubUrl}
+                          href={project.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center text-gray-600 hover:text-gray-700"
@@ -237,7 +215,7 @@ export default function ProjectsPage() {
                     </button>
                   </div>
                   <img
-                    src={selectedProject.image}
+                    src={selectedProject.image_url}
                     alt={selectedProject.title}
                     className="w-full h-64 object-cover rounded-lg mb-6"
                   />
@@ -259,9 +237,9 @@ export default function ProjectsPage() {
                       <p className="text-gray-600">{selectedProject.solutions}</p>
                     </div>
                     <div className="flex justify-end space-x-4">
-                      {selectedProject.liveUrl && (
+                      {selectedProject.live_url && (
                         <a
-                          href={selectedProject.liveUrl}
+                          href={selectedProject.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -269,9 +247,9 @@ export default function ProjectsPage() {
                           View Demo
                         </a>
                       )}
-                      {selectedProject.githubUrl && (
+                      {selectedProject.github_url && (
                         <a
-                          href={selectedProject.githubUrl}
+                          href={selectedProject.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"

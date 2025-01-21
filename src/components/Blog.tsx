@@ -1,9 +1,10 @@
 import React from 'react';
 import { supabase } from '../lib/supabase';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, Tag } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import BlogTagContent from './blog/BlogTagContent';
-import BlogContent from './blog/BlogContent';
+
+import BlogHomeContent from './blog/BlogHomeContent';
 
 const Blog = () => {
   const { data: blogs, isLoading, isError } = useQuery({
@@ -52,7 +53,7 @@ const Blog = () => {
               <div className="p-6">
                 <div className="flex items-center text-sm text-gray-500 mb-4">
                   <Calendar size={16} className="mr-2" />
-                  {/* {post.created_at} */}
+                  
                   {new Date(post.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -64,7 +65,7 @@ const Blog = () => {
                     {post.title}
                   </a>
                 </h2>
-                <BlogContent content={post.content.substring(0,150)}/>
+                <BlogHomeContent content={post.content.substring(0,130)}/>
                 <BlogTagContent post={post}/>
               </div>
             </article>
