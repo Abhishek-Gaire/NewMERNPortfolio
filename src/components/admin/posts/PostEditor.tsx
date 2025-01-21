@@ -11,7 +11,7 @@ const tagSchema = z.object({
   id: z.string(),
   name: z.string(),
 });
-
+const TINY_MCE_API_KEY = import.meta.env.TINYMCE_API_KEY;
 const postSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   content: z.string().min(1, 'Content is required'),
@@ -66,7 +66,7 @@ export default function PostEditor({ post, onSave }: PostEditorProps) {
           control={control}
           render={({ field }) => (
             <Editor
-              apiKey="vl5z9i3ml7qjcisdsej8aycmaslv0x7s8c7dl5w5gf9fxryp"
+              apiKey={TINY_MCE_API_KEY}
               onEditorChange={(content) => field.onChange(content)}
               init={{
                 plugins: [
