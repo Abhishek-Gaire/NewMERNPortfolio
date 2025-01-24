@@ -1,28 +1,30 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, MoreVertical, Edit2, Trash2, Clock, AlertCircle } from 'lucide-react';
-import { AdminProject } from '../../../types/project';
-import  useProjectStore  from '../../../stores/projectStore';
+import { Search, MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { Project } from '../../../types';
+import useProjectStore from '../../../stores/projectStore';
 import { formatDate } from '../../../utils/dateUtils';
 
 interface ProjectListProps {
-  projects: AdminProject[];
+  projects: Project[];
 }
 
 export default function ProjectList({ projects }: ProjectListProps) {
   const { setEditing, setSelectedProject } = useProjectStore();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [technologyFilter, setTechnologyFilter] = useState<string>('all');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
 
   const filteredProjects = useMemo(() => {
-    return projects.filter(project => {
-      const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    return projects.filter((project) => {
+      const matchesSearch =
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         project.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
-      const matchesPriority = priorityFilter === 'all' || project.priorityLevel === priorityFilter;
-      return matchesSearch && matchesStatus && matchesPriority;
+      const matchesTechnology =
+        technologyFilter === 'all' || project.technologies.includes(technologyFilter);
+      const matchesRole = roleFilter === 'all' || project.role === roleFilter;
+      return matchesSearch && matchesTechnology && matchesRole;
     });
-  }, [projects, searchQuery, statusFilter, priorityFilter]);
+  }, [projects, searchQuery, technologyFilter, roleFilter]);
 
   return (
     <div className="space-y-4">
@@ -39,25 +41,28 @@ export default function ProjectList({ projects }: ProjectListProps) {
         </div>
         <div className="flex gap-4">
           <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            value={technologyFilter}
+            onChange={(e) => setTechnologyFilter(e.target.value)}
             className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="all">All Status</option>
-            <option value="Not Started">Not Started</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-            <option value="On Hold">On Hold</option>
+            <option value="all">All Technologies</option>
+            {Array.from(new Set(projects.flatMap((project) => project.technologies))).map((tech) => (
+              <option key={tech} value={tech}>
+                {tech}
+              </option>
+            ))}
           </select>
           <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
             className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="all">All Priorities</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
+            <option value="all">All Roles</option>
+            {Array.from(new Set(projects.map((project) => project.role))).map((role) => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -66,16 +71,28 @@ export default function ProjectList({ projects }: ProjectListProps) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Project
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Role
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Priority
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Technologies
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Start Date
               </th>
               <th scope="col" className="relative px-6 py-3">
@@ -88,36 +105,18 @@ export default function ProjectList({ projects }: ProjectListProps) {
               <tr key={project.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
-                    <div className="text-sm font-medium text-gray-900">
-                      {project.title}
-                    </div>
+                    <div className="text-sm font-medium text-gray-900">{project.title}</div>
                     <div className="text-sm text-gray-500">
                       {project.description.substring(0, 100)}
                       {project.description.length > 100 ? '...' : ''}
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    {project.status === 'Not Started' && <Clock className="w-4 h-4 text-gray-500 mr-2" />}
-                    {project.status === 'In Progress' && <AlertCircle className="w-4 h-4 text-blue-500 mr-2" />}
-                    {project.status === 'Completed' && <AlertCircle className="w-4 h-4 text-green-500 mr-2" />}
-                    {project.status === 'On Hold' && <AlertCircle className="w-4 h-4 text-yellow-500 mr-2" />}
-                    <span className="text-sm text-gray-900">{project.status}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    project.priorityLevel === 'High' ? 'bg-red-100 text-red-800' :
-                    project.priorityLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-green-100 text-green-800'
-                  }`}>
-                    {project.priorityLevel}
-                  </span>
-                </td>
+                <td className="px-6 py-4 text-sm text-gray-500">{project.role}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {formatDate(project.startDate)}
+                  {project.technologies.join(', ')}
                 </td>
+                <td className="px-6 py-4 text-sm text-gray-500">{formatDate(project.completionDate)}</td>
                 <td className="px-6 py-4 text-right text-sm font-medium">
                   <div className="flex justify-end space-x-2">
                     <button
@@ -130,7 +129,9 @@ export default function ProjectList({ projects }: ProjectListProps) {
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => {/* Handle delete */}}
+                      onClick={() => {
+                        /* Handle delete */
+                      }}
                       className="text-red-600 hover:text-red-900"
                     >
                       <Trash2 className="w-4 h-4" />

@@ -11,7 +11,8 @@ const tagSchema = z.object({
   id: z.string(),
   name: z.string(),
 });
-const TINY_MCE_API_KEY = import.meta.env.TINYMCE_API_KEY;
+
+const TINY_MCE_API_KEY = import.meta.env.VITE_TINYMCE_API_KEY;
 const postSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   content: z.string().min(1, 'Content is required'),

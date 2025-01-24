@@ -5,8 +5,7 @@ import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../lib/supabase';
 import { Project } from '../../../types/index';
-import  useProjectStore  from '../../../stores/projectStore';
-import ImageUpload from '../shared/ImageUpload';
+import useProjectStore from '../../../stores/projectStore';
 import { generateProjectId } from '../../../utils/projectUtils';
 import { createAuditLog } from '../../../utils/auditUtils';
 import { notify } from '../../../utils/notificationUtils';
@@ -14,18 +13,15 @@ import { notify } from '../../../utils/notificationUtils';
 const projectSchema = z.object({
   title: z.string().min(1).max(100),
   description: z.string().min(1),
-  startDate: z.string().min(1),
-  expectedCompletionDate: z.string().min(1),
-  priorityLevel: z.enum(['High', 'Medium', 'Low']),
-  teamMembers: z.array(z.string()).optional(),
-  clientInfo: z.object({
-    name: z.string().optional(),
-    email: z.string().email().optional(),
-    company: z.string().optional(),
-    phone: z.string().optional(),
-  }).optional(),
-  departments: z.array(z.string()).optional(),
-  documents: z.array(z.string()).optional(),
+  role: z.string().min(1),
+  completionDate: z.string().min(1),
+  category: z.string().min(1),
+  image_url: z.string().min(1),
+  github_url: z.string().optional(),
+  live_url: z.string().optional(),
+  challenges: z.string().optional(),
+  solutions: z.string().optional(),
+  technologies: z.array(z.string()),
 });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
@@ -42,10 +38,7 @@ export default function ProjectForm() {
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
     defaultValues: selectedProject || {
-      priorityLevel: 'Medium',
-      teamMembers: [],
-      departments: [],
-      documents: [],
+      technologies: [],
     },
   });
 
@@ -53,7 +46,7 @@ export default function ProjectForm() {
     mutationFn: async (data: ProjectFormData) => {
       const projectId = generateProjectId();
       const { error } = await supabase
-        .from('admin_projects')
+        .from('Projects')
         .insert([{ id: projectId, ...data }]);
 
       if (error) throw error;
@@ -67,13 +60,13 @@ export default function ProjectForm() {
       await notify({
         type: 'project_created',
         projectId,
-        stakeholders: data.teamMembers || [],
+        stakeholders: [],
       });
 
       return projectId;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['admin-projects']);
+      queryClient.invalidateQueries(['Projects']);
       setEditing(false);
     },
   });
@@ -102,6 +95,7 @@ export default function ProjectForm() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Project Title
@@ -109,27 +103,14 @@ export default function ProjectForm() {
           <input
             type="text"
             {...register('title')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Priority Level
-          </label>
-          <select
-            {...register('priorityLevel')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-        </div>
-
+        {/* Description */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700">
             Description
@@ -137,52 +118,141 @@ export default function ProjectForm() {
           <textarea
             {...register('description')}
             rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
           )}
         </div>
 
+        {/* Role */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Role</label>
+          <input
+            type="text"
+            {...register('role')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+          {errors.role && (
+            <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
+          )}
+        </div>
+
+        {/* Completion Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Start Date
+            Completion Date
           </label>
           <input
             type="date"
-            {...register('startDate')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            {...register('completionDate')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
+          {errors.completionDate && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.completionDate.message}
+            </p>
+          )}
         </div>
 
+        {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Expected Completion Date
+            Category
           </label>
           <input
-            type="date"
-            {...register('expectedCompletionDate')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            type="text"
+            {...register('category')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+          {errors.category && (
+            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+          )}
+        </div>
+
+        {/* Image URL */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Image URL
+          </label>
+          <input
+            type="text"
+            {...register('image_url')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+          {errors.image_url && (
+            <p className="mt-1 text-sm text-red-600">{errors.image_url.message}</p>
+          )}
+        </div>
+
+        {/* GitHub URL */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            GitHub URL
+          </label>
+          <input
+            type="text"
+            {...register('github_url')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
 
-        {/* <div className="md:col-span-2">
+        {/* Live URL */}
+        <div>
           <label className="block text-sm font-medium text-gray-700">
-            Documents
+            Live URL
+          </label>
+          <input
+            type="text"
+            {...register('live_url')}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Challenges */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Challenges
+          </label>
+          <textarea
+            {...register('challenges')}
+            rows={4}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Solutions */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Solutions
+          </label>
+          <textarea
+            {...register('solutions')}
+            rows={4}
+            className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Technologies */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Technologies
           </label>
           <Controller
-            name="documents"
+            name="technologies"
             control={control}
             render={({ field }) => (
-              <FileUpload
-                value={field.value}
-                onChange={field.onChange}
-                maxSize={5242880} // 5MB
-                acceptedTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
+              <input
+                type="text"
+                value={field.value.join(', ')} // Display technologies as a comma-separated list
+                onChange={(e) =>
+                  field.onChange(e.target.value.split(',').map((t) => t.trim()))
+                }
+                className="mt-1 px-2 py-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             )}
           />
-        </div> */}
+        </div>
       </div>
 
       <div className="flex justify-end space-x-4">
