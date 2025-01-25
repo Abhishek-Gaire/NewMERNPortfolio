@@ -1,12 +1,11 @@
 import React from 'react';
 import { Bell, User } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useProfile } from '../../../hooks/useProfile';
+import NotificationButton from '../shared/NotificationButton';
 
 export default function TopBar() {
-  const { user, signOut } = useAuth();
-  const { profile } = useProfile(user?.id);
-
+  const { signOut } = useAuth();
+  const count =3;
   return (
     <header className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -33,21 +32,11 @@ export default function TopBar() {
             </div>
           </div>
           <div className="flex items-center">
-            <button className="p-2 rounded-full hover:bg-gray-100">
-              <Bell className="h-6 w-6" />
-            </button>
+            <NotificationButton count={3}/>
             <div className="ml-3 relative">
               <div className="flex items-center">
                 <button className="flex items-center max-w-xs rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  {profile?.avatar_url ? (
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src={profile.avatar_url}
-                      alt={profile.full_name || ''}
-                    />
-                  ) : (
-                    <User className="h-8 w-8 p-1 rounded-full bg-gray-100" />
-                  )}
+                 <User className="h-8 w-8 p-1 rounded-full bg-gray-100" />
                 </button>
                 <button
                   onClick={() => signOut()}

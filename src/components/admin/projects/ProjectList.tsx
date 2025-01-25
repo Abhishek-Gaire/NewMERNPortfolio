@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { Search, Edit2, Trash2 } from 'lucide-react';
 import { Project } from '../../../types';
 import useProjectStore from '../../../stores/projectStore';
 import { formatDate } from '../../../utils/dateUtils';
@@ -36,14 +36,14 @@ export default function ProjectList({ projects }: ProjectListProps) {
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+            className="pl-10 px-3 py-3 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
         <div className="flex gap-4">
           <select
             value={technologyFilter}
             onChange={(e) => setTechnologyFilter(e.target.value)}
-            className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+            className="rounded-lg px-3 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="all">All Technologies</option>
             {Array.from(new Set(projects.flatMap((project) => project.technologies))).map((tech) => (
@@ -55,7 +55,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+            className="rounded-lg px-3 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="all">All Roles</option>
             {Array.from(new Set(projects.map((project) => project.role))).map((role) => (

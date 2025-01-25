@@ -4,11 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../lib/supabase';
-import { Project } from '../../../types/index';
 import useProjectStore from '../../../stores/projectStore';
 import { generateProjectId } from '../../../utils/projectUtils';
-import { createAuditLog } from '../../../utils/auditUtils';
-import { notify } from '../../../utils/notificationUtils';
 
 const projectSchema = z.object({
   title: z.string().min(1).max(100),
@@ -51,22 +48,10 @@ export default function ProjectForm() {
 
       if (error) throw error;
 
-      await createAuditLog({
-        action: 'create_project',
-        resourceId: projectId,
-        details: data,
-      });
-
-      await notify({
-        type: 'project_created',
-        projectId,
-        stakeholders: [],
-      });
-
       return projectId;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['Projects']);
+      queryClient.invalidateQueries({ queryKey: ['Projects'] }); // Fix: Use an object with queryKey
       setEditing(false);
     },
   });

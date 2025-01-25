@@ -16,7 +16,7 @@ export default function AdminProjects() {
       const { data, error } = await supabase
         .from('Projects')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('completionDate', { ascending: false });
 
       if (error) throw error;
       return data as Project[];

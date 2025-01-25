@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Posts', href: '/admin/posts', icon: FileText },
   { name: 'Projects', href: '/admin/projects', icon: MessageSquare },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
+  { name: 'Tags', href: '/admin/tags', icon: Settings },
 ];
 
 export default function Sidebar() {

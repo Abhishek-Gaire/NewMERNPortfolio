@@ -57,21 +57,12 @@ export default function BlogPost() {
               <img
                 src={post.imageUrl}
                 alt={post.title}
-                className="w-full h-[400px] object-cover rounded-lg mb-6"
+                className="w-full h-[400px] object-cover rounded-lg mt-6 mb-6"
               />
             )}
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
             <div className="flex items-center space-x-4 text-gray-600 mb-4">
               <div className="flex items-center">
-                {/* {post.author?.avatar_url ? (
-                  <img
-                    src={post.author.avatar_url}
-                    alt={post.author.full_name}
-                    className="w-10 h-10 rounded-full mr-2"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-200 mr-2" />
-                )} */}
                 <span>Abhishek Gaire</span>
               </div>
               <span>•</span>

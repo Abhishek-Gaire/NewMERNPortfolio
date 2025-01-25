@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -17,29 +18,24 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#home" className="text-gray-400 hover:text-white">
+                <Link to="/" className="text-gray-400 hover:text-white">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#skills" className="text-gray-400 hover:text-white">
-                  Skills
-                </a>
-              </li>
-              <li>
-                <a href="/projects" className="text-gray-400 hover:text-white">
+                <Link to="/projects" className="text-gray-400 hover:text-white">
                   Projects
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#blog" className="text-gray-400 hover:text-white">
+                <Link to="/blogs" className="text-gray-400 hover:text-white">
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#contact" className="text-gray-400 hover:text-white">
+                <Link to="/contact" className="text-gray-400 hover:text-white">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -74,7 +70,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Abhishek. All rights reserved.</p>
+          <p>&copy; 2025 Abhishek. All rights reserved.</p>
         </div>
       </div>
     </footer>
