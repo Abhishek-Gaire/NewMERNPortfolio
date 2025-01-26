@@ -27,7 +27,7 @@ export interface BlogPost {
   title: string;
   content: string;
   created_at: string;
-  tags: Tag[];
+  tags: Tags[];
   imageUrl: string;
   publish:boolean;
 }
@@ -38,7 +38,7 @@ export interface Skill {
   category: 'frontend' | 'backend' | 'database' | 'tools';
 }
 
-export interface Tag{
+export interface Tags{
   id:string;
   name:string;
 }

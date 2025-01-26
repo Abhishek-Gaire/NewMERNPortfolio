@@ -1,7 +1,7 @@
 import React from 'react';
 import { supabase } from '../lib/supabase';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar } from 'lucide-react';
+import { Calendar} from 'lucide-react';
 import BlogTagContent from './blog/BlogTagContent';
 
 import BlogHomeContent from './blog/BlogHomeContent';
