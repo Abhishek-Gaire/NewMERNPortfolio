@@ -60,8 +60,6 @@ export default function BlogListing() {
       const from = (page - 1) * postsPerPage;
       query = query.range(from, from + postsPerPage - 1);
 
-      console.log(query);
-
       const { data, error, count } = await query;
 
       // Ensure data is treated as an array of BlogPost
@@ -233,7 +231,7 @@ export default function BlogListing() {
               ) : (
                 <>
                   {posts.map((post: BlogPost) => (
-                    <BlogArticle post={post} view={view} />
+                    <BlogArticle key={post.id} post={post} view={view} />
                   ))}
                 </>
               )}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { supabase } from '../lib/supabase';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+
 import { Calendar} from 'lucide-react';
 import BlogTagContent from './blog/BlogTagContent';
 
@@ -61,9 +63,9 @@ const Blog = () => {
                   })}
                 </div>
                 <h2 className="text-xl font-semibold mb-2">
-                  <a href={`/blog/${post.id}`} className="hover:text-blue-600">
+                  <Link to={`/blog/${post.id}`} className="hover:text-blue-600">
                     {post.title}
-                  </a>
+                  </Link>
                 </h2>
                 <BlogHomeContent content={post.content.substring(0,130)}/>
                 <BlogTagContent post={post}/>

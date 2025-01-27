@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import React, { useState } from "react";
+import { Send } from "lucide-react";
+import submitContactForm from "../lib/submitContact";
+import { toast } from "react-toastify";
+import ContactInformation from "./ContactInformation";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    try {
+      const { data, error } = await submitContactForm(formData);
+      if (error) {
+        toast.error("Failed to submit the form. Please try again.");
+      } else {
+        toast.success("Form submitted successfully!");
+        setFormData({ name: "", email: "", message: "" }); // Reset the form
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
   };
 
   const handleChange = (
@@ -25,38 +37,9 @@ const Contact = () => {
     <section id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-16">Get in Touch</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <Mail className="text-blue-600 mr-4" size={24} />
-                <div>
-                  <p className="font-medium">Email</p>
-                  <a href="mailto:abhisekgaire7@gmail.com" className="text-gray-600">
-                    abhisekgaire7@gmail.com
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Phone className="text-blue-600 mr-4" size={24} />
-                <div>
-                  <p className="font-medium">Phone</p>
-                  <a href="tel:+1234567890" className="text-gray-600">
-                    +977 9840000000
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <MapPin className="text-blue-600 mr-4" size={24} />
-                <div>
-                  <p className="font-medium">Location</p>
-                  <p className="text-gray-600">Pokhara,Nepal</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ContactInformation />
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

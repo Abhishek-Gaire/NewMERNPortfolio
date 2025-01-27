@@ -1,17 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
+import {  
   FileText, 
   MessageSquare, 
-  Settings 
+  Tags,
+  Bell
 } from 'lucide-react';
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Posts', href: '/admin/posts', icon: FileText },
   { name: 'Projects', href: '/admin/projects', icon: MessageSquare },
-  { name: 'Tags', href: '/admin/tags', icon: Settings },
+  { name: 'Tags', href: '/admin/tags', icon: Tags },
+  { name: 'Notifications', href: '/admin/notifications', icon: Bell },
 ];
 
 export default function Sidebar() {

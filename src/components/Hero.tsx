@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -16,19 +17,19 @@ const Hero = () => {
               modern technologies. Specialized in MongoDB, Express.js, React, and Node.js.
             </p>
             <div className="flex space-x-4">
-              <a
-                href="/projects"
+              <Link
+                to="/projects"
                 className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
               >
                 View Projects
                 <ArrowRight className="ml-2" size={20} />
-              </a>
-              <a
-                href="#contact"
+              </Link>
+              <Link
+                to="/contact"
                 className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
               >
                 Contact Me
-              </a>
+              </Link>
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center">

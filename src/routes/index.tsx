@@ -9,6 +9,7 @@ import AdminProjects from '../pages/admin/Projects';
 import BlogListing from '../pages/BlogListing';
 import Contact from '../pages/Contact';
 import TagComponent from '../pages/admin/Tags';
+import ContactNotification from '../pages/admin/ContactNotification';
 
 export const router = createBrowserRouter([
   {
@@ -39,9 +40,11 @@ export const router = createBrowserRouter([
     path: '/admin',
     element: <DashboardLayout />,
     children: [
+      { index: true, element: <Posts /> }, // Default route for /admin
       { path: 'posts', element: <Posts /> },
       { path: 'projects', element: <AdminProjects /> },
-      { path:"tags" , element: <TagComponent/>}
+      { path: 'tags', element: <TagComponent /> },
+      { path: 'notifications', element :<ContactNotification/>}
     ],
   },
-]);
+])

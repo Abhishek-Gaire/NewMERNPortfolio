@@ -1,11 +1,33 @@
-import React from 'react';
-import { Bell, User } from 'lucide-react';
+import React, { useState } from 'react';
+import {  User } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import NotificationButton from '../shared/NotificationButton';
+import { supabase } from '../../../lib/supabase';
+import { useQuery } from '@tanstack/react-query';
 
 export default function TopBar() {
   const { signOut } = useAuth();
-  const count =3;
+  const [count, setCount] = useState(0);
+
+  const { error } = useQuery({
+    queryKey: ['contact-count'],
+    queryFn: async () => {
+      // Fetch only the count of rows
+      const { count, error } = await supabase
+        .from('Contacts')
+        .select('*', { count: 'exact', head: true }); // `head: true` ensures no data is returned
+
+      if (error) {
+        throw new Error(error.message); // Throw error to be caught by React Query
+      }
+
+      // Set the count state with the number of rows
+      setCount(count || 0);
+
+      // No need to return data since we're only fetching the count
+      return null;
+    },
+  });
   return (
     <header className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -32,7 +54,7 @@ export default function TopBar() {
             </div>
           </div>
           <div className="flex items-center">
-            <NotificationButton count={3}/>
+            {error ? "": <NotificationButton count={count}/>}
             <div className="ml-3 relative">
               <div className="flex items-center">
                 <button className="flex items-center max-w-xs rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
