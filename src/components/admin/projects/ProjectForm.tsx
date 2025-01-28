@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../lib/supabase';
 import useProjectStore from '../../../stores/projectStore';
-import { generateProjectId } from '../../../utils/projectUtils';
 
 const projectSchema = z.object({
   title: z.string().min(1).max(100),
@@ -41,14 +40,11 @@ export default function ProjectForm() {
 
   const createProject = useMutation({
     mutationFn: async (data: ProjectFormData) => {
-      const projectId = generateProjectId();
       const { error } = await supabase
         .from('Projects')
-        .insert([{ id: projectId, ...data }]);
+        .insert([data ]);
 
       if (error) throw error;
-
-      return projectId;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['Projects'] }); // Fix: Use an object with queryKey

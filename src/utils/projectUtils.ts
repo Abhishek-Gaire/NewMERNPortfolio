@@ -1,8 +1,3 @@
-import { nanoid } from 'nanoid';
-
-export function generateProjectId(): string {
-  return `PRJ-${nanoid(10)}`;
-}
 
 export function validateDateRange(startDate: string, endDate: string): boolean {
   const start = new Date(startDate);

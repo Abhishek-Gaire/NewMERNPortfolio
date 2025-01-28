@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { Trash2 } from 'lucide-react'; 
+import { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabase";
+import { Trash2 } from "lucide-react";
 
 const ContactNotification = () => {
   const [contacts, setContacts] = useState([null]);
@@ -12,16 +12,15 @@ const ContactNotification = () => {
     const fetchContacts = async () => {
       try {
         const { data, error } = await supabase
-          .from('Contacts')
-          .select('*')
-          .order('created_at', { ascending: false });
+          .from("Contacts")
+          .select("*")
+          .order("created_at", { ascending: false });
 
         if (error) {
           throw error;
         }
-
         setContacts(data || []);
-      } catch (error:any) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);
@@ -32,13 +31,10 @@ const ContactNotification = () => {
   }, []);
 
   // Delete a contact
-  const handleDelete = async (id:number) => {
+  const handleDelete = async (id: number) => {
     try {
-      const { error } = await supabase
-        .from('Contacts')
-        .delete()
-        .eq('id', id);
-
+      console.log(id);
+      const { error } = await supabase.from("Contacts").delete().eq("id", id);
       if (error) {
         throw error;
       }
@@ -47,7 +43,7 @@ const ContactNotification = () => {
       setContacts((prevContacts) =>
         prevContacts.filter((contact) => contact.id !== id)
       );
-    } catch (error:any) {
+    } catch (error: any) {
       setError(error.message);
     }
   };

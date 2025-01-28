@@ -113,6 +113,21 @@ export default function BlogListing() {
 
       <main className="min-h-screen bg-gray-50 pt-20">
         <div className="container mx-auto px-4 py-12">
+          {/* Breadcrumb */}
+          <nav className="flex mb-8 text-gray-500 text-sm">
+            <a href="/" className="hover:text-gray-900">Home</a>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900">Blogs</span>
+          </nav>
+
+          {/* Header */}
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">My Blog Posts</h1>
+            <p className="text-xl text-gray-600">
+              Explore my latest blog posts
+            </p>
+          </div>
+
           {/* Search and Filters */}
           <div className="mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
             <div className="relative flex-1 max-w-lg">
