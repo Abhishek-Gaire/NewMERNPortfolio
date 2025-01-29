@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import {  User } from 'lucide-react';
-import { useAuth } from '../../../contexts/AuthContext';
-import NotificationButton from '../shared/NotificationButton';
-import { supabase } from '../../../lib/supabase';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from "react";
+import { User } from "lucide-react";
+import { useAuth } from "../../../contexts/AuthContext";
+import { supabase } from "../../../lib/supabase";
+import { useQuery } from "@tanstack/react-query";
+
+import NotificationButton from "../shared/NotificationButton";
 
 export default function TopBar() {
   const { signOut } = useAuth();
   const [count, setCount] = useState(0);
 
   const { error } = useQuery({
-    queryKey: ['contact-count'],
+    queryKey: ["contact-count"],
     queryFn: async () => {
       // Fetch only the count of rows
       const { count, error } = await supabase
-        .from('Contacts')
-        .select('*', { count: 'exact', head: true }); // `head: true` ensures no data is returned
+        .from("Contacts")
+        .select("*", { count: "exact", head: true }); // `head: true` ensures no data is returned
 
       if (error) {
         throw new Error(error.message); // Throw error to be caught by React Query
@@ -54,11 +55,11 @@ export default function TopBar() {
             </div>
           </div>
           <div className="flex items-center">
-            {error ? "": <NotificationButton count={count}/>}
+            {error ? "" : <NotificationButton count={count} />}
             <div className="ml-3 relative">
               <div className="flex items-center">
                 <button className="flex items-center max-w-xs rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                 <User className="h-8 w-8 p-1 rounded-full bg-gray-100" />
+                  <User className="h-8 w-8 p-1 rounded-full bg-gray-100" />
                 </button>
                 <button
                   onClick={() => signOut()}

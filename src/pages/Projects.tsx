@@ -1,44 +1,52 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Grid, List, ExternalLink, Github, Share2 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import React, { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { Search, Grid, List, ExternalLink, Github, Share2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { Project } from '../types/index';
-import { supabase } from '../lib/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { Helmet } from "react-helmet-async";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-const categories = ['All', 'Full Stack', 'Machine Learning', 'Collaboration'];
+import { Project } from "../types/index";
+import { supabase } from "../lib/supabase";
+import { useQuery } from "@tanstack/react-query";
+
+const categories = ["All", "Full Stack", "Machine Learning", "Collaboration"];
 
 export default function ProjectsPage() {
-  const {data:projects,isLoading,isError} = useQuery({
-    queryKey:['project'],
-    queryFn: async() => {
-      const {data,error} = await supabase
-      .from("Projects")
-      .select("*");
+  const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["project"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("Projects").select("*");
 
-      if(error){
-        throw new Error(error.message)
+      if (error) {
+        throw new Error(error.message);
       }
-     
+
       return data;
-    }
-  })
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+    },
+  });
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
-    return projects?.filter(project => {
-      const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    return projects?.filter((project) => {
+      const matchesSearch =
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.technologies.some((tech:any) => tech.toLowerCase().includes(searchQuery.toLowerCase()));
-      
-      const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
-      
+        project.technologies.some((tech: any) =>
+          tech.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+      const matchesCategory =
+        selectedCategory === "All" || project.category === selectedCategory;
+
       return matchesSearch && matchesCategory;
     });
   }, [searchQuery, selectedCategory]);
@@ -54,9 +62,15 @@ export default function ProjectsPage() {
     <>
       <Helmet>
         <title>Projects Portfolio</title>
-        <meta name="description" content="Explore my portfolio of web development and software engineering projects." />
+        <meta
+          name="description"
+          content="Explore my portfolio of web development and software engineering projects."
+        />
         <meta property="og:title" content="Projects Portfolio" />
-        <meta property="og:description" content="Explore my portfolio of web development and software engineering projects." />
+        <meta
+          property="og:description"
+          content="Explore my portfolio of web development and software engineering projects."
+        />
       </Helmet>
 
       <Header />
@@ -65,14 +79,18 @@ export default function ProjectsPage() {
         <div className="container mx-auto px-4 py-12">
           {/* Breadcrumb */}
           <nav className="flex mb-8 text-gray-500 text-sm">
-            <a href="/" className="hover:text-gray-900">Home</a>
+            <Link to="/" className="hover:text-gray-900">
+              Home
+            </Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Projects</span>
           </nav>
 
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              My Projects
+            </h1>
             <p className="text-xl text-gray-600">
               Explore my latest work and personal projects
             </p>
@@ -82,7 +100,10 @@ export default function ProjectsPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Search projects..."
@@ -96,21 +117,31 @@ export default function ProjectsPage() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-gray-600'}`}
+                onClick={() => setViewMode("grid")}
+                className={`p-2 rounded-lg ${
+                  viewMode === "grid"
+                    ? "bg-blue-100 text-blue-600"
+                    : "text-gray-600"
+                }`}
               >
                 <Grid size={20} />
               </button>
               <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-600'}`}
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded-lg ${
+                  viewMode === "list"
+                    ? "bg-blue-100 text-blue-600"
+                    : "text-gray-600"
+                }`}
               >
                 <List size={20} />
               </button>
@@ -118,7 +149,13 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid/List */}
-          <div className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
+          <div
+            className={`grid gap-8 ${
+              viewMode === "grid"
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                : "grid-cols-1"
+            }`}
+          >
             {filteredProjects?.map((project) => (
               <motion.div
                 key={project.id}
@@ -128,17 +165,17 @@ export default function ProjectsPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow ${
-                  viewMode === 'list' ? 'flex' : ''
+                  viewMode === "list" ? "flex" : ""
                 }`}
               >
-                <div className={`${viewMode === 'list' ? 'w-1/3' : ''}`}>
+                <div className={`${viewMode === "list" ? "w-1/3" : ""}`}>
                   <img
                     src={project.image_url}
                     alt={project.title}
                     className="w-full h-48 object-cover"
                   />
                 </div>
-                <div className={`p-6 ${viewMode === 'list' ? 'w-2/3' : ''}`}>
+                <div className={`p-6 ${viewMode === "list" ? "w-2/3" : ""}`}>
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-semibold text-gray-900">
                       {project.title}
@@ -149,7 +186,7 @@ export default function ProjectsPage() {
                   </div>
                   <p className="text-gray-600 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech:any) => (
+                    {project.technologies.map((tech: any) => (
                       <span
                         key={tech}
                         className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
@@ -206,10 +243,12 @@ export default function ProjectsPage() {
               >
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-2xl font-bold">{selectedProject.title}</h2>
+                    <h2 className="text-2xl font-bold">
+                      {selectedProject.title}
+                    </h2>
                     <button
                       onClick={() => setSelectedProject(null)}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-gray-500 text-3xl hover:text-gray-700"
                     >
                       ×
                     </button>
@@ -221,8 +260,12 @@ export default function ProjectsPage() {
                   />
                   <div className="space-y-4">
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">Description</h3>
-                      <p className="text-gray-600">{selectedProject.description}</p>
+                      <h3 className="font-semibold text-lg mb-2">
+                        Description
+                      </h3>
+                      <p className="text-gray-600">
+                        {selectedProject.description}
+                      </p>
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Role</h3>
@@ -230,11 +273,15 @@ export default function ProjectsPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Challenges</h3>
-                      <p className="text-gray-600">{selectedProject.challenges}</p>
+                      <p className="text-gray-600">
+                        {selectedProject.challenges}
+                      </p>
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Solutions</h3>
-                      <p className="text-gray-600">{selectedProject.solutions}</p>
+                      <p className="text-gray-600">
+                        {selectedProject.solutions}
+                      </p>
                     </div>
                     <div className="flex justify-end space-x-4">
                       {selectedProject.live_url && (

@@ -2,7 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactInformation() {
   return (
-    <div>
+    <div className="text-xl">
       <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
       <div className="space-y-4">
         <div className="flex items-center">
