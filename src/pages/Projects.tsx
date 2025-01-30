@@ -11,7 +11,7 @@ import { Project } from "../types/index";
 import { supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 
-const categories = ["All", "Full Stack", "Machine Learning", "Collaboration"];
+const categories = ["All", "Full Stack", "Backend", "Collaboration"];
 
 export default function ProjectsPage() {
   const {
@@ -256,7 +256,7 @@ export default function ProjectsPage() {
                   <img
                     src={selectedProject.image_url}
                     alt={selectedProject.title}
-                    className="w-full h-64 object-cover rounded-lg mb-6"
+                    className="w-full h-80 object-cover rounded-lg mb-6"
                   />
                   <div className="space-y-4">
                     <div>
