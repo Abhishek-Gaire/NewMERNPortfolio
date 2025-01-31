@@ -23,7 +23,7 @@ export default function BlogListing() {
 
   // Pagination state
   const page = parseInt(searchParams.get("page") || "1");
-  const postsPerPage = parseInt(searchParams.get("limit") || "5");
+  const postsPerPage = parseInt(searchParams.get("limit") || "10");
   const search = searchParams.get("search") || "";
   const sortBy = searchParams.get("sort") || "newest";
   const selectedTags = searchParams.getAll("tag");
