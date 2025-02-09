@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { router } from './routes';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
 
@@ -28,6 +29,7 @@ function App() {
             theme="light"
           />
           <RouterProvider router={router} />
+          <SpeedInsights />
         </AuthProvider>
       </QueryClientProvider>
     </HelmetProvider>
